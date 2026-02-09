@@ -1,0 +1,355 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Petopia release-blocker fixes: new logo system + TypeScript-imported image strategy with consistent fallbacks",
+  "requirements": [
+    {
+      "id": "REQ-71",
+      "summary": "Regenerate Petopia logo system and enforce a single reusable Logo component used everywhere, with brand text exactly “Petopia” and no “Premium” in any logo/alt/fallback contexts.",
+      "acceptanceCriteria": [
+        "Searching the codebase for the string \"Premium\" returns zero instances in logo/brand contexts (including SVG text, image names, alt/fallback content).",
+        "All pages that render a logo (global header/footer, /account/login, /account/signup, /cart, /checkout, /payment, and all confirmation pages) display the exact wordmark text “Petopia”.",
+        "There is exactly one reusable frontend component/module responsible for rendering the logo (icon + wordmark) and all other logo renderings delegate to it (no duplicate inline SVGs or hardcoded logo paths)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/petopia-logo-icon.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated Petopia primary logo icon asset at this exact path (wordmark must be exactly “Petopia”; no “Premium” anywhere)."
+        },
+        {
+          "path": "frontend/public/assets/generated/petopia-logo-lockup.dim_1400x400.png",
+          "operation": "create",
+          "description": "Add the generated Petopia horizontal lockup (icon + wordmark) asset at this exact path (wordmark must be exactly “Petopia”; no “Premium” anywhere)."
+        },
+        {
+          "path": "frontend/src/assets/brand.ts",
+          "operation": "create",
+          "description": "Create a single TypeScript module that imports and re-exports the brand logo assets (icon + lockup) so all in-app logo rendering uses TypeScript imports as the single source of truth."
+        },
+        {
+          "path": "frontend/src/components/navigation/BrandLogo.tsx",
+          "operation": "modify",
+          "description": "Refactor BrandLogo to exclusively render the new imported logo assets from frontend/src/assets/brand.ts (no string paths), ensure alt/ARIA/fallback text is exactly “Petopia”, and remove any legacy logo references. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/navigation/SiteNavbar.tsx",
+          "operation": "modify",
+          "description": "Ensure navbar delegates all logo rendering to BrandLogo with no inline logo markup or hardcoded asset paths, and verify any brand/alt/fallback text remains exactly “Petopia”. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/navigation/SiteFooter.tsx",
+          "operation": "modify",
+          "description": "Ensure footer delegates all logo rendering to BrandLogo and remove/adjust any brand-adjacent copy that could reintroduce “Premium” in brand contexts. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/account/LoginPage.tsx",
+          "operation": "modify",
+          "description": "Ensure the login page’s logo renders via BrandLogo only (no hardcoded logo assets) and the displayed/accessible brand text remains “Petopia”. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/account/SignupPage.tsx",
+          "operation": "modify",
+          "description": "Ensure the signup page’s logo renders via BrandLogo only (no hardcoded logo assets) and the displayed/accessible brand text remains “Petopia”. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/cart/CartPage.tsx",
+          "operation": "modify",
+          "description": "Ensure cart page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Ensure checkout page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/checkout/PaymentPage.tsx",
+          "operation": "modify",
+          "description": "Ensure payment page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/confirmations/OrderPlacedPage.tsx",
+          "operation": "modify",
+          "description": "Ensure order confirmation page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/confirmations/AdoptionRequestSubmittedPage.tsx",
+          "operation": "modify",
+          "description": "Ensure adoption confirmation page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/confirmations/ServiceBookingConfirmedPage.tsx",
+          "operation": "modify",
+          "description": "Ensure service confirmation page header uses BrandLogo only (no hardcoded assets) and remove any legacy brand text variants. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-72",
+      "summary": "Update favicon to a simplified icon derived from the new logo icon and ensure index.html references it as a static asset.",
+      "acceptanceCriteria": [
+        "The favicon is visually recognizable at small sizes and matches the logo icon style.",
+        "frontend/index.html references the new favicon file and the favicon loads correctly in the browser tab on first load."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/petopia-favicon.dim_64x64.png",
+          "operation": "create",
+          "description": "Add/replace the generated Petopia favicon derived from the new logo icon at this exact path."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Ensure the HTML entry references the favicon via the static path /assets/generated/petopia-favicon.dim_64x64.png (favicon is the exception to the TypeScript-imported in-app image strategy)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-73",
+      "summary": "Standardize in-app images to TypeScript-imported assets by refactoring content modules and consuming pages/components so images resolve reliably across all routes (including dynamic routes).",
+      "acceptanceCriteria": [
+        "In-app images (cards, heroes, galleries, thumbnails, order/cart summary images) are rendered from TypeScript imports rather than string paths like \"/assets/...\".",
+        "Navigation across dynamic routes (e.g., product detail, adoption species/breed/pet profile, blog topic/article) shows correct images on first load and on refresh (no broken images).",
+        "No components/pages reference broken absolute paths for in-app images (e.g., hardcoded \"/assets/generated/...\" in JSX for non-favicon use cases)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/assets/generated/index.ts",
+          "operation": "create",
+          "description": "Create a central asset registry module that imports and re-exports all in-app images used by content modules/pages (products, adoption, services, blog, heroes, etc.) so usage is consistent and route-safe."
+        },
+        {
+          "path": "frontend/src/content/products.ts",
+          "operation": "modify",
+          "description": "Replace hardcoded string image paths (e.g., \"/assets/generated/...\") with references imported from frontend/src/assets/generated/index.ts, keeping existing content structure intact."
+        },
+        {
+          "path": "frontend/src/content/adoption.ts",
+          "operation": "modify",
+          "description": "Replace hardcoded string image paths with references imported from frontend/src/assets/generated/index.ts, ensuring adoption listing/detail images are TypeScript-import based."
+        },
+        {
+          "path": "frontend/src/content/services.ts",
+          "operation": "modify",
+          "description": "Replace hardcoded string image paths with references imported from frontend/src/assets/generated/index.ts, ensuring service category/detail images are TypeScript-import based."
+        },
+        {
+          "path": "frontend/src/content/blog.ts",
+          "operation": "modify",
+          "description": "Replace hardcoded string image paths with references imported from frontend/src/assets/generated/index.ts, ensuring blog topic/article images are TypeScript-import based."
+        },
+        {
+          "path": "frontend/src/components/design/PageHero.tsx",
+          "operation": "modify",
+          "description": "Refactor PageHero to accept imported image references reliably (and ensure any internal rendering avoids hardcoded public paths for in-app images)."
+        },
+        {
+          "path": "frontend/src/pages/cart/CartPage.tsx",
+          "operation": "modify",
+          "description": "Ensure cart item images originate from TypeScript-imported asset references (via the stored cart item image values) and remove any remaining hardcoded \"/assets/...\" in-app image usages."
+        },
+        {
+          "path": "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Ensure checkout order summary images render from TypeScript-imported asset references (via cart item images) with no hardcoded \"/assets/...\" in-app image usages."
+        },
+        {
+          "path": "frontend/src/pages/checkout/PaymentPage.tsx",
+          "operation": "modify",
+          "description": "Ensure payment order summary images render from TypeScript-imported asset references (via cart item images) with no hardcoded \"/assets/...\" in-app image usages."
+        },
+        {
+          "path": "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "operation": "modify",
+          "description": "Refactor any product category/listing images to use the TypeScript-imported image references coming from the refactored products content module."
+        },
+        {
+          "path": "frontend/src/pages/products/ProductDetailPage.tsx",
+          "operation": "modify",
+          "description": "Refactor any product gallery/thumbnail images to use the TypeScript-imported image references coming from the refactored products content module."
+        },
+        {
+          "path": "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "operation": "modify",
+          "description": "Refactor any service category/listing images to use the TypeScript-imported image references coming from the refactored services content module."
+        },
+        {
+          "path": "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "operation": "modify",
+          "description": "Refactor any service detail images to use the TypeScript-imported image references coming from the refactored services content module."
+        },
+        {
+          "path": "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "operation": "modify",
+          "description": "Refactor blog topic card/hero images to use the TypeScript-imported image references coming from the refactored blog content module."
+        },
+        {
+          "path": "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "operation": "modify",
+          "description": "Refactor blog article hero/inline images to use the TypeScript-imported image references coming from the refactored blog content module."
+        },
+        {
+          "path": "frontend/src/pages/BlogPage.tsx",
+          "operation": "modify",
+          "description": "Refactor blog listing images to use the TypeScript-imported image references coming from the refactored blog content module."
+        },
+        {
+          "path": "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "operation": "modify",
+          "description": "Refactor adoption listing grid images to use the TypeScript-imported image references coming from the refactored adoption content module."
+        },
+        {
+          "path": "frontend/src/pages/adoption/PetProfilePage.tsx",
+          "operation": "modify",
+          "description": "Refactor pet profile gallery/detail images to use the TypeScript-imported image references coming from the refactored adoption content module."
+        }
+      ]
+    },
+    {
+      "id": "REQ-74",
+      "summary": "Add consistent image loading behavior and fallbacks for lazy-loaded images so cards and detail pages never show broken-image icons or layout collapse.",
+      "acceptanceCriteria": [
+        "If an image fails to load, the UI displays a consistent fallback presentation instead of a broken-image icon or layout collapse.",
+        "Key listing/detail surfaces (Products, Services, Adoption, Blog) do not show missing/broken images during normal navigation and refresh scenarios.",
+        "Lazy-loaded images use consistent settings and do not cause blank gaps during initial render (especially in grids and galleries)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/media/AppImage.tsx",
+          "operation": "create",
+          "description": "Create a reusable AppImage component that standardizes loading behavior (lazy-loading defaults where appropriate) and implements a consistent onError fallback UI to prevent broken-image icons/layout collapse."
+        },
+        {
+          "path": "frontend/src/components/states/EmptyState.tsx",
+          "operation": "modify",
+          "description": "Align empty-state/fallback visuals so image-failure fallbacks and content empty states feel consistent across the app (without touching frontend/src/components/ui)."
+        },
+        {
+          "path": "frontend/src/components/design/PageHero.tsx",
+          "operation": "modify",
+          "description": "Update PageHero to use AppImage for any hero images it renders (or to apply equivalent fallback behavior) so hero surfaces don’t render broken images or blank gaps."
+        },
+        {
+          "path": "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for in-grid product/category images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/products/ProductDetailPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for product gallery/thumbnail images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for service listing images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for service detail images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for adoption listing images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/adoption/PetProfilePage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for pet profile images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for blog topic/listing images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for blog article hero/inline images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/blog/BlogPage.tsx",
+          "operation": "modify",
+          "description": "Replace direct <img> usage for blog listing images with AppImage to ensure consistent lazy-load settings and graceful fallback on failures."
+        },
+        {
+          "path": "frontend/src/pages/cart/CartPage.tsx",
+          "operation": "modify",
+          "description": "Use AppImage for cart item images to ensure failures display a consistent fallback and lazy-loading behaves consistently in lists/grids."
+        },
+        {
+          "path": "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "Use AppImage for checkout order summary images to ensure failures display a consistent fallback and lazy-loading behaves consistently."
+        },
+        {
+          "path": "frontend/src/pages/checkout/PaymentPage.tsx",
+          "operation": "modify",
+          "description": "Use AppImage for payment order summary images to ensure failures display a consistent fallback and lazy-loading behaves consistently."
+        }
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "summary": "Perform a release-blocking QA sweep and fix any remaining “Premium” remnants and broken images across the sitemap, especially on Adoption/Product/Service/Blog routes and checkout flow.",
+      "acceptanceCriteria": [
+        "Manual QA pass confirms the three blocker conditions (no “Premium”, no broken images, correct image loading across Adoption/Product/Service/Blog) are satisfied across routed navigation and direct URL entry (refresh).",
+        "Any discovered broken routes or broken assets are fixed as part of this task, with no regressions in cart/checkout/payment navigation."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/navigation/BrandLogo.tsx",
+          "operation": "modify",
+          "description": "Final audit pass: ensure no legacy logo markup, asset names, or fallback text can surface “Premium”, and confirm all logo rendering paths route through this single component."
+        },
+        {
+          "path": "frontend/src/content/products.ts",
+          "operation": "modify",
+          "description": "QA sweep fixes: adjust any remaining image references or content-derived image fields that could still rely on hardcoded public paths or cause broken images on refresh."
+        },
+        {
+          "path": "frontend/src/content/adoption.ts",
+          "operation": "modify",
+          "description": "QA sweep fixes: adjust any remaining image references or content-derived image fields that could still rely on hardcoded public paths or cause broken images on refresh."
+        },
+        {
+          "path": "frontend/src/content/services.ts",
+          "operation": "modify",
+          "description": "QA sweep fixes: adjust any remaining image references or content-derived image fields that could still rely on hardcoded public paths or cause broken images on refresh."
+        },
+        {
+          "path": "frontend/src/content/blog.ts",
+          "operation": "modify",
+          "description": "QA sweep fixes: adjust any remaining image references or content-derived image fields that could still rely on hardcoded public paths or cause broken images on refresh."
+        },
+        {
+          "path": "frontend/src/pages/account/LoginPage.tsx",
+          "operation": "modify",
+          "description": "QA sweep fixes: ensure the login page contains no remaining “Premium” brand remnants and that all images used on the page are TypeScript-import based with fallbacks."
+        },
+        {
+          "path": "frontend/src/pages/account/SignupPage.tsx",
+          "operation": "modify",
+          "description": "QA sweep fixes: ensure the signup page contains no remaining “Premium” brand remnants and that all images used on the page are TypeScript-import based with fallbacks."
+        },
+        {
+          "path": "frontend/src/pages/cart/CartPage.tsx",
+          "operation": "modify",
+          "description": "QA sweep fixes: verify cart and its empty state show no broken images and no “Premium” brand remnants; ensure no regressions in navigation to checkout/payment."
+        },
+        {
+          "path": "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "operation": "modify",
+          "description": "QA sweep fixes: verify checkout renders order summary images reliably on route navigation and refresh, with no broken images."
+        },
+        {
+          "path": "frontend/src/pages/checkout/PaymentPage.tsx",
+          "operation": "modify",
+          "description": "QA sweep fixes: verify payment renders order summary images reliably on route navigation and refresh, with no broken images."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-09T09:02:47.362Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 5,
+    "implemented": 5,
+    "items": [
+      {
+        "id": "REQ-71",
+        "summary": "Generate a brand-new Petopia logo system (wordmark + subtle pet icon) and replace ALL existing logo usages so the only displayed brand text is exactly “Petopia” (no “Premium” anywhere), with a single source of truth used across: navbar, footer, login/signup, cart/checkout/payment, confirmation pages, and any fallback/alt logo rendering.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/petopia-logo-icon.dim_512x512.png",
+          "frontend/public/assets/generated/petopia-logo-lockup.dim_1400x400.png",
+          "frontend/src/assets/brand.ts",
+          "frontend/src/components/navigation/BrandLogo.tsx",
+          "frontend/src/components/navigation/SiteNavbar.tsx",
+          "frontend/src/components/navigation/SiteFooter.tsx",
+          "frontend/src/pages/account/LoginPage.tsx",
+          "frontend/src/pages/account/SignupPage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx",
+          "frontend/src/pages/confirmations/OrderPlacedPage.tsx",
+          "frontend/src/pages/confirmations/AdoptionRequestSubmittedPage.tsx",
+          "frontend/src/pages/confirmations/ServiceBookingConfirmedPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/petopia-logo-icon.dim_512x512.png",
+          "frontend/public/assets/generated/petopia-logo-lockup.dim_1400x400.png",
+          "frontend/src/assets/brand.ts",
+          "frontend/src/components/navigation/BrandLogo.tsx",
+          "frontend/src/pages/account/LoginPage.tsx",
+          "frontend/src/pages/account/SignupPage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-72",
+        "summary": "Update favicon to a simplified version derived directly from the new Petopia logo icon (not a letter), and ensure the HTML entry point references the updated favicon asset.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/petopia-favicon.dim_64x64.png",
+          "frontend/index.html"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/petopia-favicon.dim_64x64.png",
+          "frontend/index.html"
+        ]
+      },
+      {
+        "id": "REQ-73",
+        "summary": "Standardize the entire in-app image strategy to TypeScript-imported assets (no mixed public-path images for in-app rendering): refactor content modules (e.g., products, adoption, blog, services) and page/components to use imported image references so images resolve reliably on all routes, including dynamic routes.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/assets/generated/index.ts",
+          "frontend/src/content/products.ts",
+          "frontend/src/content/adoption.ts",
+          "frontend/src/content/services.ts",
+          "frontend/src/content/blog.ts",
+          "frontend/src/components/design/PageHero.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx",
+          "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "frontend/src/pages/products/ProductDetailPage.tsx",
+          "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "frontend/src/pages/BlogPage.tsx",
+          "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "frontend/src/pages/adoption/PetProfilePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/assets/generated/index.ts",
+          "frontend/src/content/products.ts",
+          "frontend/src/content/adoption.ts",
+          "frontend/src/content/services.ts",
+          "frontend/src/content/blog.ts",
+          "frontend/src/components/design/PageHero.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx",
+          "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "frontend/src/pages/products/ProductDetailPage.tsx",
+          "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "frontend/src/pages/adoption/PetProfilePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-74",
+        "summary": "Improve image loading reliability across all pages by adding consistent loading behavior and fallbacks for lazy-loaded images (e.g., graceful placeholder/empty-state rendering when an image fails to load) so every card and detail page shows an image correctly on first load.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/media/AppImage.tsx",
+          "frontend/src/components/states/EmptyState.tsx",
+          "frontend/src/components/design/PageHero.tsx",
+          "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "frontend/src/pages/products/ProductDetailPage.tsx",
+          "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "frontend/src/pages/adoption/PetProfilePage.tsx",
+          "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "frontend/src/pages/blog/BlogPage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/media/AppImage.tsx",
+          "frontend/src/components/design/PageHero.tsx",
+          "frontend/src/pages/products/ProductCategoryPage.tsx",
+          "frontend/src/pages/products/ProductDetailPage.tsx",
+          "frontend/src/pages/services/ServicesCategoryPage.tsx",
+          "frontend/src/pages/services/ServiceDetailPage.tsx",
+          "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+          "frontend/src/pages/adoption/PetProfilePage.tsx",
+          "frontend/src/pages/blog/BlogTopicPage.tsx",
+          "frontend/src/pages/blog/BlogArticlePage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-75",
+        "summary": "Run a release-blocking QA sweep and fix any remaining issues before marking the build complete: verify “Premium” is removed everywhere, verify zero broken images across the sitemap, and verify Adoption/Product/Service/Blog images load correctly on all routes.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/navigation/BrandLogo.tsx",
+          "frontend/src/content/products.ts",
+          "frontend/src/content/adoption.ts",
+          "frontend/src/content/services.ts",
+          "frontend/src/content/blog.ts",
+          "frontend/src/pages/account/LoginPage.tsx",
+          "frontend/src/pages/account/SignupPage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/navigation/BrandLogo.tsx",
+          "frontend/src/content/products.ts",
+          "frontend/src/content/adoption.ts",
+          "frontend/src/content/services.ts",
+          "frontend/src/content/blog.ts",
+          "frontend/src/pages/account/LoginPage.tsx",
+          "frontend/src/pages/account/SignupPage.tsx",
+          "frontend/src/pages/cart/CartPage.tsx",
+          "frontend/src/pages/checkout/CheckoutPage.tsx",
+          "frontend/src/pages/checkout/PaymentPage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.html",
+    "frontend/public/assets/generated/petopia-favicon.dim_64x64.png",
+    "frontend/public/assets/generated/petopia-logo-icon.dim_512x512.png",
+    "frontend/public/assets/generated/petopia-logo-lockup.dim_1400x400.png",
+    "frontend/src/assets/brand.ts",
+    "frontend/src/assets/generated/index.ts",
+    "frontend/src/components/design/PageHero.tsx",
+    "frontend/src/components/media/AppImage.tsx",
+    "frontend/src/components/navigation/BrandLogo.tsx",
+    "frontend/src/content/adoption.ts",
+    "frontend/src/content/blog.ts",
+    "frontend/src/content/products.ts",
+    "frontend/src/content/services.ts",
+    "frontend/src/pages/account/LoginPage.tsx",
+    "frontend/src/pages/account/SignupPage.tsx",
+    "frontend/src/pages/adoption/AdoptionBreedPage.tsx",
+    "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+    "frontend/src/pages/adoption/PetProfilePage.tsx",
+    "frontend/src/pages/blog/BlogArticlePage.tsx",
+    "frontend/src/pages/blog/BlogTopicPage.tsx",
+    "frontend/src/pages/cart/CartPage.tsx",
+    "frontend/src/pages/checkout/CheckoutPage.tsx",
+    "frontend/src/pages/checkout/PaymentPage.tsx",
+    "frontend/src/pages/products/ProductCategoryPage.tsx",
+    "frontend/src/pages/products/ProductDetailPage.tsx",
+    "frontend/src/pages/services/ServiceDetailPage.tsx",
+    "frontend/src/pages/services/ServicesCategoryPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

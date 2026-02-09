@@ -1,0 +1,792 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 17,
+  "summary": "Petopia rebuild now includes critical functional/UX fixes: enforce strict Adoption routing hierarchy (Adoption → Species → Breed → Pet Profile) with no Not Found routes, add a dedicated Cart page as a mandatory step before the existing centralized Checkout → Payment → Confirmation flow (Payment cannot be accessed without cart context), correct PETOPIA branding so logo text is exactly “Petopia” everywhere (remove “Premium”), fix/optimize all image loading and regenerate any mismatched/low-quality visuals for 100% image-to-content accuracy, and upgrade Blog to a more interactive, premium experience (filters, featured, hover animations, reading progress, related, share UI).",
+  "architectural_notes": [
+    "Mobile-first responsive design; optimized for fast load and easy deployment to Netlify/Vercel.",
+    "SEO-friendly semantic structure (headings/meta/accessible markup) and smooth scrolling + lightweight animations.",
+    "Frontend remains React + TypeScript + Tailwind; implement a true multi-page experience via React Router (no plain HTML/CSS rebuild).",
+    "Light-theme only: remove dark mode entirely; redesign to a premium startup palette (white/beige/charcoal with muted green or navy accents) and realistic pet photography placeholders.",
+    "All pages use fresh, professional content/layouts (do not reuse the previous single-page content); ensure working internal navigation with active link highlighting and smooth page transitions.",
+    "Enterprise-grade information architecture: 3-level hierarchies where expected (Category → Detail), with clear cross-linking and no orphan/dead-end pages.",
+    "Centralized UI-only Checkout route; all commerce/action CTAs route into Checkout; no real payment processing or backend integration.",
+    "Simulated authentication UX (UI-only) with protected-route feel (locked/redirect-to-login) and a simulated logged-in header/account menu state.",
+    "Deep-page navigation patterns: breadcrumbs and/or secondary navigation for multi-level sections; ensure natural back/forward flows.",
+    "Content/layout constraint: keep headings/text outside of images; images are purely visual media blocks with separate captions/sections."
+  ],
+  "known_issues": [
+    "Build/deploy encountered an 'AI hiccup' and needs rerun after applying the requested refinements.",
+    "Scope conflict to resolve: existing project constraints specify frontend-only/no backend, but latest consolidated request requires simulated backend logic for auth and payment flows.",
+    "Critical: Adoption card clicks can lead to “Not Found” due to broken/missing dynamic routes/params.",
+    "Critical: Cart page missing; Cart → Checkout → Payment flow not enforced; Payment can be accessed without cart context.",
+    "Branding bug: logo/wordmark includes incorrect text (e.g., “Premium”) and must read exactly “Petopia” everywhere.",
+    "Broken/slow/low-quality images and mismatches across pages; images must load reliably on first view.",
+    "Blog feels generic/low-depth and lacks required interactivity (filters/featured/progress/related/share)."
+  ],
+  "isFixRequest": true,
+  "imageRequirements": "## Required Images\n- Petopia primary logo icon (petopia-logo-icon.dim_512x512.png)\n- Petopia wordmark + icon horizontal lockup on light background (petopia-logo-lockup.dim_1400x400.png)\n- Petopia favicon derived from the logo icon (petopia-favicon.dim_64x64.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-single-page-mobile-first-petopia-marketing-website-in-the-existing-frontend-stack-react-typescript-tailwind-shadcn-ui-that-behaves-like-a-static-site-no-backend-calls-no-dynamic-persistence-optimized-for-simple-static-hosting-builds-e-g-the-frontend-build-output-can-be-deployed-as-static-files",
+      "title": "Create a single-page, mobile-first “Petopia” marketing website in the existing frontend stack (React + TypeScript + Tailwind + shadcn UI) that behaves like a static site (no backend calls, no dynamic persistence), optimized for simple static hosting builds (e.g., the frontend build output can be deployed as static files).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-petopia-visual-style-consistently-across-the-site-clean-modern-premium-ui-soft-pastel-palette-light-beige-warm-cream-soft-green-sky-blue-rounded-cards-smooth-shadows-gentle-animations-friendly-but-professional-tone-and-modern-typography-poppins-and-or-inter",
+      "title": "Implement the Petopia visual style consistently across the site: clean modern premium UI, soft pastel palette (light beige, warm cream, soft green, sky blue), rounded cards, smooth shadows, gentle animations, friendly-but-professional tone, and modern typography (Poppins and/or Inter).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-homepage-sections-with-the-specified-copy-and-ctas-hero-headline-because-your-pet-deserves-the-best-subtext-two-cta-buttons-explore-services-and-shop-for-pets-with-a-pet-themed-background-and-subtle-animation-services-6-cards-featured-products-4-categories-view-all-products-why-choose-petopia-5-icon-bullets-adoption-community-success-stories-teaser-adopt-a-friend-cta-testimonials-photos-star-ratings-carousel-blog-tips-4-post-teasers-across-tips-nutrition-training-health-call-to-action-join-the-petopia-family-today-email-signup-app-coming-soon-text-and-footer-about-services-blog-contact-links-social-icons-newsletter-signup",
+      "title": "Build the homepage sections with the specified copy and CTAs: Hero (headline “Because Your Pet Deserves the Best”, subtext, two CTA buttons “Explore Services” and “Shop for Pets” with a pet-themed background and subtle animation), Services (6 cards), Featured Products (4 categories + “View All Products”), Why Choose Petopia (5 icon bullets), Adoption & Community (success stories teaser + “Adopt a Friend” CTA), Testimonials (photos, star ratings, carousel), Blog/Tips (4 post teasers across tips/nutrition/training/health), Call-to-Action (\"Join the Petopia Family Today\", email signup, “App coming soon” text), and Footer (About/Services/Blog/Contact links, social icons, newsletter signup).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-sticky-top-navbar-with-a-blurred-translucent-background-on-scroll-and-anchor-links-to-each-homepage-section-implement-smooth-scrolling-and-active-section-indication-or-equivalent-visual-feedback-without-introducing-additional-pages",
+      "title": "Add a sticky top navbar with a blurred/translucent background (on scroll) and anchor links to each homepage section; implement smooth scrolling and active-section indication (or equivalent visual feedback) without introducing additional pages.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-dark-mode-toggle-that-switches-the-entire-site-between-light-and-dark-themes-while-keeping-the-premium-aesthetic-persist-the-chosen-mode-locally-so-it-remains-after-refresh",
+      "title": "Implement dark mode toggle that switches the entire site between light and dark themes while keeping the premium aesthetic; persist the chosen mode locally so it remains after refresh.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-premium-motion-details-scroll-triggered-fade-in-slide-in-animations-for-section-content-subtle-looping-pet-paw-animations-as-decorative-accents-micro-interactions-for-buttons-hover-scale-glow-pressed-state-and-cards-hover-lift-scale",
+      "title": "Add premium motion details: scroll-triggered fade-in/slide-in animations for section content; subtle looping pet paw animations as decorative accents; micro-interactions for buttons (hover scale/glow, pressed state) and cards (hover lift/scale).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-floating-primary-cta-button-visible-on-mobile-that-provides-quick-access-to-a-key-action-e-g-scroll-to-services-or-open-the-email-signup-area-and-ensure-it-does-not-overlap-critical-ui-cookie-banners-not-required",
+      "title": "Add a floating primary CTA button visible on mobile that provides quick access to a key action (e.g., scroll to Services or open the email signup area) and ensure it does not overlap critical UI (cookie banners not required).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-performance-and-seo-friendly-structure-semantic-html-structure-headings-landmarks-sensible-meta-tags-title-description-optimized-lazy-loaded-images-and-responsive-layout-across-common-breakpoints",
+      "title": "Ensure performance and SEO-friendly structure: semantic HTML structure (headings/landmarks), sensible meta tags (title/description), optimized/lazy-loaded images, and responsive layout across common breakpoints.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-include-on-page-form-behaviors-for-the-email-signup-and-newsletter-signup-client-side-only-validate-basic-email-format-show-a-success-message-on-submit-and-do-not-transmit-data-to-a-server",
+      "title": "Include on-page form behaviors for the email signup and newsletter signup (client-side only): validate basic email format, show a success message on submit, and do not transmit data to a server.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-convert-the-current-single-page-petopia-app-into-a-multi-page-react-router-application-with-these-routes-and-page-components-home-services-services-products-products-adoption-adoption-blog-blog-about-about-contact-contact-each-page-must-render-as-a-standalone-page-not-anchor-section-scrolling-and-all-internal-navigation-must-use-client-side-routing",
+      "title": "Convert the current single-page Petopia app into a multi-page React Router application with these routes and page components: Home (/), Services (/services), Products (/products), Adoption (/adoption), Blog (/blog), About (/about), Contact (/contact). Each page must render as a standalone page (not anchor-section scrolling) and all internal navigation must use client-side routing.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-full-ui-replacement-with-a-premium-market-ready-light-theme-only-design-system-white-beige-charcoal-with-muted-green-or-navy-accents-clean-typography-inter-poppins-minimal-elegant-layout-and-refined-spacing-depth-remove-the-existing-pastel-glassmorphism-styling-and-any-playful-cartoonish-visual-elements",
+      "title": "Implement a full UI replacement with a premium, market-ready light-theme-only design system (white/beige/charcoal with muted green or navy accents), clean typography (Inter/Poppins), minimal elegant layout, and refined spacing/depth; remove the existing pastel/glassmorphism styling and any playful/cartoonish visual elements.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-dark-mode-completely-from-the-ui-and-styling-including-remove-the-theme-toggle-control-from-the-navbar-ensure-the-app-always-renders-in-light-theme-and-remove-disable-dark-theme-css-variables-and-any-dark-mode-specific-class-usage-in-components",
+      "title": "Remove dark mode completely from the UI and styling, including: remove the theme toggle control from the navbar, ensure the app always renders in light theme, and remove/disable dark-theme CSS variables and any dark-mode-specific class usage in components.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-fresh-premium-professional-startup-grade-english-copy-and-new-layouts-for-all-pages-home-services-products-adoption-blog-about-contact-do-not-reuse-the-old-single-page-section-copy-structure-ensure-the-tone-is-modern-trustworthy-and-market-ready",
+      "title": "Create fresh, premium, professional, startup-grade English copy and new layouts for all pages (Home, Services, Products, Adoption, Blog, About, Contact). Do not reuse the old single-page section copy/structure; ensure the tone is modern, trustworthy, and market-ready.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-global-navigation-and-footer-so-that-all-menu-and-footer-links-navigate-correctly-between-routed-pages-with-active-link-highlighting-for-the-current-route-keep-the-navbar-sticky-and-premium-in-feel-light-theme-appropriate",
+      "title": "Update the global navigation and footer so that all menu and footer links navigate correctly between routed pages, with active link highlighting for the current route. Keep the navbar sticky and premium in feel (light-theme appropriate).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-polished-modern-ui-interactions-across-the-multi-page-site-smooth-page-transitions-between-routes-refined-hover-press-micro-interactions-for-buttons-and-cards-scroll-based-reveal-fade-in-animations-for-page-sections-and-a-scroll-to-top-button-respect-reduced-motion-preferences",
+      "title": "Add polished, modern UI interactions across the multi-page site: smooth page transitions between routes, refined hover/press micro-interactions for buttons and cards, scroll-based reveal/fade-in animations for page sections, and a scroll-to-top button. Respect reduced-motion preferences.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-realistic-high-end-stock-style-placeholder-pet-imagery-across-all-pages-using-locally-available-static-assets-images-must-be-responsive-optimized-for-web-display-appropriate-sizing-and-compression-and-used-in-a-way-that-matches-a-professional-high-end-brand-aesthetic",
+      "title": "Integrate realistic, high-end stock-style placeholder pet imagery across all pages using locally available static assets. Images must be responsive, optimized for web display (appropriate sizing and compression), and used in a way that matches a professional, high-end brand aesthetic.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-store-all-newly-generated-image-assets-in-frontend-public-assets-generated-and-render-them-directly-from-the-frontend-without-routing-images-through-the-backend",
+      "title": "Store all newly generated image assets in frontend/public/assets/generated and render them directly from the frontend without routing images through the backend.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-enterprise-grade-fully-connected-multi-level-sitemap-by-adding-all-reasonable-expected-subpages-with-3-level-hierarchy-where-appropriate-for-services-products-adoption-blog-resources-about-and-account-ui-only-plus-system-pages-checkout-and-confirmations-ensuring-every-page-is-reachable-via-logical-internal-navigation-no-orphan-pages-no-dead-ends",
+      "title": "Implement an enterprise-grade, fully connected multi-level sitemap by adding all reasonable, expected subpages (with 3-level hierarchy where appropriate) for Services, Products, Adoption, Blog/Resources, About, and Account (UI-only), plus system pages (Checkout and confirmations), ensuring every page is reachable via logical internal navigation (no orphan pages, no dead ends).",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-services-subpages-with-a-3-level-hierarchy-and-connected-user-journey-services-landing-service-category-pages-service-detail-pages-each-category-and-detail-page-must-include-a-hero-image-heading-separated-description-key-features-pricing-plan-style-ui-ui-only-and-a-primary-cta-that-routes-to-checkout-for-booking-ui-only",
+      "title": "Add Services subpages with a 3-level hierarchy and connected user journey: Services landing → Service category pages → Service detail pages. Each category and detail page must include a hero (image + heading separated), description, key features, pricing/plan-style UI (UI-only), and a primary CTA that routes to Checkout for booking (UI-only).",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-products-subpages-with-a-3-level-hierarchy-and-connected-user-journey-products-landing-product-category-pages-product-detail-pages-category-pages-must-support-filters-sorting-ui-frontend-only-and-product-detail-pages-must-include-image-gallery-specs-reviews-ui-mock-and-buy-now-cta-routing-to-checkout-ui-only",
+      "title": "Add Products subpages with a 3-level hierarchy and connected user journey: Products landing → Product category pages → Product detail pages. Category pages must support filters/sorting UI (frontend-only), and product detail pages must include image gallery, specs, reviews UI (mock), and “Buy Now” CTA routing to Checkout (UI-only).",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-adoption-subpages-with-a-3-level-hierarchy-and-connected-user-journey-adoption-landing-adoption-listings-page-s-individual-pet-profile-pages-listings-must-support-filters-species-age-size-location-ui-only-and-show-empty-state-ui-pet-profiles-must-include-image-gallery-temperament-details-care-requirements-and-an-adopt-now-apply-to-adopt-cta-routing-to-checkout-ui-only-and-then-to-an-adoption-request-submitted-confirmation-page",
+      "title": "Add Adoption subpages with a 3-level hierarchy and connected user journey: Adoption landing → Adoption listings page(s) → Individual pet profile pages. Listings must support filters (species/age/size/location UI-only) and show empty-state UI. Pet profiles must include image gallery, temperament details, care requirements, and an “Adopt Now” / “Apply to Adopt” CTA routing to Checkout (UI-only) and then to an Adoption Request Submitted confirmation page.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-blog-resources-subpages-with-a-3-level-hierarchy-and-connected-user-journey-blog-resources-landing-listing-topic-category-pages-article-detail-pages-article-pages-must-include-reading-time-author-ui-mock-table-of-contents-ui-and-related-articles-links-to-keep-navigation-continuous-no-dead-ends",
+      "title": "Add Blog/Resources subpages with a 3-level hierarchy and connected user journey: Blog/Resources landing/listing → Topic/category pages → Article detail pages. Article pages must include reading-time, author UI (mock), table-of-contents UI, and related articles links to keep navigation continuous (no dead ends).",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-about-subpages-with-a-multi-level-hierarchy-about-landing-company-info-hub-dedicated-pages-for-team-mission-values-careers-and-optionally-press-partners-industry-standard-each-page-must-include-realistic-imagery-clear-sections-and-cross-links-to-relevant-actions-e-g-careers-contact-partners-services-adoption",
+      "title": "Add About subpages with a multi-level hierarchy: About landing → Company info hub → dedicated pages for Team, Mission/Values, Careers, and optionally Press/Partners (industry-standard). Each page must include realistic imagery, clear sections, and cross-links to relevant actions (e.g., Careers → Contact, Partners → Services/Adoption).",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-centralized-checkout-payment-flow-ui-only-add-a-dedicated-checkout-page-with-order-summary-user-details-form-name-email-address-payment-method-selection-ui-only-and-a-proceed-to-payment-place-order-action-that-routes-to-outcome-pages-success-and-failure-ui-only-ensure-all-relevant-ctas-across-the-site-route-to-this-single-centralized-checkout-page",
+      "title": "Implement a centralized Checkout / Payment flow (UI-only): add a dedicated Checkout page with order summary, user details form (name/email/address), payment method selection (UI-only), and a “Proceed to Payment” / “Place Order” action that routes to outcome pages (Success and Failure UI-only). Ensure all relevant CTAs across the site route to this single centralized Checkout page.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-unique-professional-confirmation-feedback-pages-consistent-layout-unique-messaging-icons-context-for-key-actions-order-placed-payment-confirmation-adoption-request-submitted-service-booking-confirmation-and-contact-form-submitted-ensure-each-confirmation-page-provides-clear-next-steps-e-g-view-orders-requests-continue-browsing-contact-support",
+      "title": "Add unique, professional confirmation/feedback pages (consistent layout, unique messaging/icons/context) for key actions: Order Placed/Payment Confirmation, Adoption Request Submitted, Service Booking Confirmation, and Contact Form Submitted. Ensure each confirmation page provides clear next steps (e.g., view orders/requests, continue browsing, contact support).",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-simulated-authentication-ux-ui-only-with-account-pages-login-sign-up-profile-and-orders-requests-history-protected-pages-profile-orders-requests-must-appear-locked-and-redirect-to-login-when-accessed-directly-while-still-allowing-free-navigation-for-demo-purposes-after-login-signup-display-a-simulated-logged-in-ui-state-avatar-account-menu-and-allow-logout-to-reset-the-demo-state",
+      "title": "Implement a simulated authentication UX (UI-only) with Account pages: Login, Sign Up, Profile, and Orders/Requests history. Protected pages (Profile, Orders/Requests) must appear locked and redirect to Login when accessed directly, while still allowing free navigation for demo purposes. After Login/Signup, display a simulated logged-in UI state (avatar/account menu) and allow logout to reset the demo state.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-production-style-navigation-helpers-for-deep-pages-breadcrumbs-on-category-detail-pages-consistent-secondary-navigation-within-major-sections-services-products-adoption-blog-resources-about-and-contextual-back-to-listing-category-links-to-support-natural-exploration",
+      "title": "Add production-style navigation helpers for deep pages: breadcrumbs on category/detail pages, consistent secondary navigation within major sections (Services, Products, Adoption, Blog/Resources, About), and contextual “Back to listing/category” links to support natural exploration.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-system-empty-error-pages-and-states-to-ensure-production-completeness-frontend-only-a-generic-not-found-page-a-generic-error-page-state-ui-and-reusable-empty-state-ui-e-g-no-results-found-used-by-filters-search-uis-on-listings-category-pages",
+      "title": "Add system/empty/error pages and states to ensure production completeness (frontend-only): a generic Not Found page, a generic Error page/state (UI), and reusable empty-state UI (e.g., “No results found”) used by filters/search UIs on listings/category pages.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-interactivity-and-polish-across-the-expanded-site-while-maintaining-a-professional-premium-light-theme-aesthetic-refine-spacing-typography-hierarchy-improve-hover-press-feedback-on-cards-buttons-ensure-smooth-route-transitions-and-apply-subtle-section-reveal-animations-consistently-on-new-pages-respect-reduced-motion-preferences",
+      "title": "Increase interactivity and polish across the expanded site while maintaining a professional, premium light-theme aesthetic: refine spacing/typography hierarchy, improve hover/press feedback on cards/buttons, ensure smooth route transitions, and apply subtle section reveal animations consistently on new pages (respect reduced-motion preferences).",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-strict-content-and-media-rules-across-all-newly-added-pages-use-only-professional-high-quality-realistic-stock-style-placeholder-images-ensure-images-and-headings-are-clearly-separated-no-text-headings-inside-images-and-keep-layouts-clean-with-proper-spacing-hierarchy-and-alignment",
+      "title": "Enforce strict content and media rules across all newly added pages: use only professional, high-quality, realistic stock-style placeholder images; ensure images and headings are clearly separated (no text/headings inside images); and keep layouts clean with proper spacing, hierarchy, and alignment.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refine-petopia-brand-logo-placement-and-sizing-in-the-global-header-and-footer-to-look-more-premium-and-consistent-across-breakpoints-while-keeping-navigation-behavior-unchanged",
+      "title": "Refine Petopia brand/logo placement and sizing in the global header and footer to look more premium and consistent across breakpoints, while keeping navigation behavior unchanged.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-an-overall-visual-polish-pass-across-page-layouts-and-core-design-components-to-improve-spacing-typography-rhythm-hover-press-states-and-section-composition-while-preserving-the-existing-premium-light-theme-and-content",
+      "title": "Apply an overall visual polish pass across page layouts and core design components to improve spacing, typography rhythm, hover/press states, and section composition while preserving the existing premium light theme and content.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-and-polish-accessibility-and-ui-fit-and-finish-details-related-to-the-header-footer-brand-area-and-primary-navigation-focus-rings-hit-targets-aria-labels-where-needed-without-changing-user-facing-copy",
+      "title": "Audit and polish accessibility and UI fit-and-finish details related to the header/footer brand area and primary navigation (focus rings, hit targets, aria-labels where needed) without changing user-facing copy.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-all-generic-lifestyle-placeholder-imagery-across-products-services-and-adoption-with-specific-content-accurate-visuals-and-update-the-site-s-content-sources-and-cards-to-use-those-visuals-consistently-e-g-product-images-must-look-like-the-actual-product-type-such-as-food-bags-toys-accessories-grooming-kits-adoption-listings-must-use-realistic-pet-profile-photos-service-pages-must-use-relevant-service-imagery",
+      "title": "Replace all generic/lifestyle placeholder imagery across Products, Services, and Adoption with specific, content-accurate visuals and update the site’s content sources and cards to use those visuals consistently (e.g., product images must look like the actual product type such as food bags/toys/accessories/grooming kits; adoption listings must use realistic pet profile photos; service pages must use relevant service imagery).",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-content-depth-and-volume-for-products-by-expanding-the-structured-product-catalog-so-that-each-category-contains-many-products-not-just-a-couple-and-each-product-has-its-own-detailed-product-page-content-images-long-description-specs-and-realistic-reviews-ui-copy-without-repetitive-templating",
+      "title": "Increase content depth and volume for Products by expanding the structured product catalog so that each category contains many products (not just a couple), and each product has its own detailed product page content (images, long description, specs, and realistic reviews UI copy) without repetitive templating.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-content-depth-and-volume-for-adoption-by-expanding-adoption-listings-and-ensuring-each-pet-listing-routes-to-an-individual-pet-profile-page-with-distinct-realistic-profile-imagery-and-non-repetitive-profile-content-temperament-care-requirements-location-adoption-fee-etc",
+      "title": "Increase content depth and volume for Adoption by expanding adoption listings and ensuring each pet listing routes to an individual pet profile page with distinct, realistic profile imagery and non-repetitive profile content (temperament, care requirements, location, adoption fee, etc.).",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-content-depth-and-volume-for-services-by-expanding-service-categories-and-service-detail-pages-so-there-are-multiple-categories-and-multiple-services-per-category-each-with-distinct-detailed-copy-tier-pricing-ui-ui-only-key-features-and-relevant-service-imagery",
+      "title": "Increase content depth and volume for Services by expanding service categories and service detail pages so there are multiple categories and multiple services per category, each with distinct detailed copy, tier/pricing UI (UI-only), key features, and relevant service imagery.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-content-depth-and-volume-for-blog-resources-by-expanding-the-number-of-articles-and-ensuring-each-article-has-an-individual-post-page-with-distinct-hero-imagery-non-repetitive-section-content-and-related-article-navigation-that-keeps-users-within-the-content-graph-no-dead-ends",
+      "title": "Increase content depth and volume for Blog/Resources by expanding the number of articles and ensuring each article has an individual post page with distinct hero imagery, non-repetitive section content, and related-article navigation that keeps users within the content graph (no dead ends).",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refine-all-subpages-including-deep-3-level-pages-to-avoid-shallow-or-repetitive-templates-and-enforce-a-consistent-premium-spacing-typography-layout-hierarchy-with-clear-separation-between-images-headings-body-text-and-ctas-no-text-over-images-anywhere-including-hero-sections",
+      "title": "Refine ALL subpages (including deep 3-level pages) to avoid shallow or repetitive templates and enforce a consistent premium spacing/typography/layout hierarchy, with clear separation between images, headings, body text, and CTAs (no text over images anywhere, including hero sections).",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-override-the-existing-simulated-authentication-ux-with-a-refined-realistic-ui-only-login-signup-experience-and-a-clearly-defined-logged-in-state-avatar-account-menu-including-simulated-protected-account-pages-behavior-redirect-to-login-when-not-authenticated-while-keeping-everything-frontend-only-no-backend-calls",
+      "title": "Replace/override the existing simulated authentication UX with a refined, realistic UI-only login/signup experience and a clearly defined logged-in state (avatar/account menu), including simulated protected account pages behavior (redirect to login when not authenticated) while keeping everything frontend-only (no backend calls).",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-override-the-existing-checkout-payment-ux-with-a-refined-centralized-ui-only-checkout-that-is-reachable-from-all-relevant-ctas-site-wide-buy-now-book-service-apply-to-adopt-includes-a-realistic-order-summary-and-user-details-forms-and-simulates-payment-outcomes-leading-to-the-appropriate-unique-confirmation-pages-per-flow",
+      "title": "Replace/override the existing checkout/payment UX with a refined, centralized UI-only checkout that is reachable from all relevant CTAs site-wide (Buy Now / Book Service / Apply to Adopt), includes a realistic order summary and user details forms, and simulates payment outcomes leading to the appropriate unique confirmation pages per flow.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-and-apply-a-new-premium-petopia-logo-and-update-branding-assets-so-the-new-logo-appears-in-the-navbar-and-footer-and-a-matching-favicon-is-used-at-the-html-entry-point-ensure-the-updated-brand-mark-fits-the-existing-premium-light-theme-design-system-and-is-consistently-sized-aligned-across-breakpoints",
+      "title": "Generate and apply a NEW premium Petopia logo and update branding assets so the new logo appears in the navbar and footer and a matching favicon is used at the HTML entry point; ensure the updated brand mark fits the existing premium light-theme design system and is consistently sized/aligned across breakpoints.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-site-wide-visual-polish-pass-not-only-global-components-so-the-entire-multi-level-sitemap-feels-production-ready-refine-spacing-typography-hierarchy-card-density-imagery-presentation-and-cta-treatments-consistently-across-top-level-and-deep-pages",
+      "title": "Apply a site-wide visual polish pass (not only global components) so the entire multi-level sitemap feels production-ready: refine spacing, typography hierarchy, card density, imagery presentation, and CTA treatments consistently across top-level and deep pages.",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-strict-petopia-branding-across-the-entire-app-ensure-the-only-company-name-displayed-anywhere-is-petopia-and-the-logo-text-wordmark-reads-exactly-petopia-in-premium-typography-no-placeholder-incorrect-brand-names",
+      "title": "Enforce strict PETOPIA branding across the entire app: ensure the only company name displayed anywhere is “PETOPIA”, and the logo text/wordmark reads exactly “Petopia” in premium typography (no placeholder/incorrect brand names).",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-petopia-logo-usage-so-the-same-premium-pet-centric-not-cartoonish-logo-appears-consistently-in-the-global-navbar-all-pages-global-footer-sign-in-page-sign-up-page-checkout-payment-pages-and-all-confirmation-pages",
+      "title": "Update the Petopia logo usage so the same premium, pet-centric (not cartoonish) logo appears consistently in: the global navbar (all pages), global footer, Sign-in page, Sign-up page, Checkout/Payment pages, and all confirmation pages.",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-sign-in-page-header-visual-so-it-matches-petopia-s-premium-brand-identity-clean-modern-premium-not-cartoonish-and-does-not-include-any-text-baked-into-the-image",
+      "title": "Replace the current Sign-in page header visual so it matches Petopia’s premium brand identity (clean, modern, premium; not cartoonish) and does not include any text baked into the image.",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-realistic-simulated-authentication-backed-by-the-motoko-canister-no-real-identity-provider-required-add-backend-methods-to-support-sign-up-sign-in-sign-out-and-session-validation-integrate-the-frontend-auth-provider-so-protected-routes-depend-on-this-session-state-and-are-blocked-after-logout",
+      "title": "Implement realistic simulated authentication backed by the Motoko canister (no real identity provider required): add backend methods to support sign-up, sign-in, sign-out, and session validation; integrate the frontend auth provider so protected routes depend on this session state and are blocked after logout.",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-the-account-section-ia-and-navigation-to-include-profile-orders-products-adoption-requests-and-saved-items-ensure-smooth-navigation-between-login-signup-account-pages-and-expose-these-destinations-in-the-authenticated-user-menu-desktop-and-mobile",
+      "title": "Expand the Account section IA and navigation to include: Profile, Orders (Products), Adoption Requests, and Saved Items; ensure smooth navigation between Login ↔ Signup ↔ Account pages and expose these destinations in the authenticated user menu (desktop and mobile).",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-connected-production-ready-checkout-payment-outcome-flow-for-all-three-sources-product-adoption-service-product-adoption-service-cta-checkout-page-payment-page-success-route-appropriate-unique-confirmation-page-include-a-failure-outcome-path-with-retry",
+      "title": "Implement a connected, production-ready Checkout → Payment → Outcome flow for all three sources (Product, Adoption, Service): Product/Adoption/Service CTA → Checkout page → Payment page → Success route → appropriate unique confirmation page; include a Failure outcome path with retry.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-simulated-payment-processing-logic-in-the-motoko-canister-no-real-payments-expose-a-payment-processing-method-that-accepts-an-order-payload-and-returns-a-simulated-success-failure-result-integrate-the-payment-ui-to-call-this-backend-method-and-route-accordingly",
+      "title": "Add simulated payment processing logic in the Motoko canister (no real payments): expose a payment-processing method that accepts an order payload and returns a simulated success/failure result; integrate the Payment UI to call this backend method and route accordingly.",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-upgrade-the-payment-ui-to-look-production-ready-with-multiple-payment-method-options-e-g-card-upi-wallet-bank-transfer-clear-selection-states-and-a-secure-verified-presentation-consistent-with-the-site-design-system",
+      "title": "Upgrade the Payment UI to look production-ready with multiple payment method options (e.g., card, UPI, wallet, bank transfer), clear selection states, and a secure/verified presentation consistent with the site design system.",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-strict-image-to-content-accuracy-across-adoption-content-ensure-cat-listings-use-cat-images-only-dog-listings-use-dog-images-only-and-any-breed-specific-listing-uses-images-of-that-exact-breed-ensure-each-pet-profile-s-images-match-its-description-no-generic-mismatches",
+      "title": "Enforce strict image-to-content accuracy across Adoption content: ensure cat listings use cat images only, dog listings use dog images only, and any breed-specific listing uses images of that exact breed; ensure each pet profile’s images match its description (no generic mismatches).",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-deepen-the-adoption-information-architecture-to-be-multi-level-and-fully-connected-adoption-species-breed-pet-profile-with-navigation-paths-that-avoid-dead-ends-breadcrumbs-back-to-lists-and-cross-links",
+      "title": "Deepen the Adoption information architecture to be multi-level and fully connected: Adoption → Species → Breed → Pet Profile, with navigation paths that avoid dead ends (breadcrumbs, back-to lists, and cross-links).",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-entire-site-including-deep-subpages-receives-a-site-wide-premium-light-theme-refinement-pass-consistent-heading-hierarchy-clean-spacing-professional-typography-and-strict-separation-between-images-and-headings-body-ctas-no-text-over-images",
+      "title": "Ensure the entire site (including deep subpages) receives a site-wide premium light-theme refinement pass: consistent heading hierarchy, clean spacing, professional typography, and strict separation between images and headings/body/CTAs (no text over images).",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-confirmation-and-success-pages-remain-separate-and-uniquely-tailored-per-flow-order-placed-payment-success-adoption-request-submitted-with-the-same-design-system-but-distinct-messaging-and-relevant-visuals",
+      "title": "Ensure confirmation and success pages remain separate and uniquely tailored per flow (Order placed, Payment success, Adoption request submitted), with the same design system but distinct messaging and relevant visuals.",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-perform-a-final-production-quality-audit-pass-before-delivery-verify-no-incorrect-branding-remains-no-placeholder-generic-mismatched-visuals-remain-and-all-navigation-works-end-to-end-across-auth-commerce-flows",
+      "title": "Perform a final production-quality audit pass before delivery: verify no incorrect branding remains, no placeholder/generic mismatched visuals remain, and all navigation works end-to-end across auth + commerce flows.",
+      "reqIds": [
+        "REQ-60"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-adoption-navigation-so-all-adoption-cards-dogs-cats-species-breeds-pets-follow-the-strict-hierarchy-adoption-species-breed-pet-profile-using-valid-dynamic-routes-and-params-and-no-adoption-click-path-ever-lands-on-not-found",
+      "title": "Fix Adoption navigation so all adoption cards (Dogs/Cats/Species/Breeds/Pets) follow the strict hierarchy Adoption → Species → Breed → Pet Profile using valid dynamic routes and params, and no adoption click path ever lands on Not Found.",
+      "reqIds": [
+        "REQ-61"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-pet-profile-page-to-include-the-required-core-fields-and-correct-ctas-show-the-pet-s-breed-accurate-image-s-name-age-gender-and-vaccination-status-and-provide-a-primary-cta-labeled-exactly-adopt-now-that-adds-the-adoption-request-to-cart-not-directly-to-checkout",
+      "title": "Update the Pet Profile page to include the required core fields and correct CTAs: show the pet’s breed-accurate image(s), name, age, gender, and vaccination status, and provide a primary CTA labeled exactly “Adopt Now” that adds the adoption request to Cart (not directly to Checkout).",
+      "reqIds": [
+        "REQ-62"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-dedicated-cart-page-and-route-cart-that-supports-products-services-and-adoption-requests-with-mandatory-cart-first-commerce-flow-any-page-add-to-cart-cart-checkout-payment-confirmation",
+      "title": "Add a dedicated Cart page and route (/cart) that supports Products, Services, and Adoption requests with mandatory cart-first commerce flow: Any page → Add to Cart → Cart → Checkout → Payment → Confirmation.",
+      "reqIds": [
+        "REQ-63"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-that-payment-cannot-be-accessed-without-valid-cart-checkout-context-users-attempting-direct-access-to-payment-must-be-redirected-to-the-correct-step-cart-or-checkout-with-no-blank-screens",
+      "title": "Enforce that Payment cannot be accessed without valid Cart/Checkout context; users attempting direct access to /payment must be redirected to the correct step (Cart or Checkout) with no blank screens.",
+      "reqIds": [
+        "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-refactor-all-buy-now-book-apply-adopt-ctas-across-products-services-and-adoption-flows-to-add-items-to-cart-first-rather-than-writing-a-single-item-order-context-and-jumping-straight-to-checkout-while-keeping-the-existing-centralized-checkout-payment-pages-do-not-rebuild-payment",
+      "title": "Refactor all “Buy Now” / “Book” / “Apply/Adopt” CTAs across Products, Services, and Adoption flows to add items to Cart first (rather than writing a single-item order context and jumping straight to /checkout), while keeping the existing centralized Checkout/Payment pages (do not rebuild payment).",
+      "reqIds": [
+        "REQ-65"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-petopia-branding-wordmark-everywhere-remove-the-word-premium-from-the-logo-wordmark-and-ensure-the-displayed-brand-name-is-exactly-petopia-across-navbar-footer-login-signup-checkout-payment-and-confirmation-pages",
+      "title": "Fix PETOPIA branding/wordmark everywhere: remove the word “Premium” from the logo/wordmark and ensure the displayed brand name is exactly “Petopia” across navbar, footer, login/signup, checkout/payment, and confirmation pages.",
+      "reqIds": [
+        "REQ-66"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-resolve-image-loading-reliability-and-quality-issues-site-wide-fix-broken-image-paths-ensure-fast-and-reliable-first-load-rendering-with-proper-lazy-loading-where-appropriate-and-replace-regenerate-any-low-quality-generic-placeholder-or-content-mismatched-images-across-adoption-products-services-and-blog",
+      "title": "Resolve image loading reliability and quality issues site-wide: fix broken image paths, ensure fast and reliable first-load rendering (with proper lazy loading where appropriate), and replace/regenerate any low-quality, generic placeholder, or content-mismatched images across Adoption, Products, Services, and Blog.",
+      "reqIds": [
+        "REQ-67"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-polish-deep-subpages-products-services-adoption-so-they-no-longer-feel-like-shallow-templates-improve-spacing-typography-hierarchy-and-cta-prominence-while-preserving-the-existing-premium-light-theme-design-system-and-strict-separation-between-images-and-headings-body-ctas",
+      "title": "Polish deep subpages (Products, Services, Adoption) so they no longer feel like shallow templates: improve spacing, typography hierarchy, and CTA prominence while preserving the existing premium light-theme design system and strict separation between images and headings/body/CTAs.",
+      "reqIds": [
+        "REQ-69"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-run-a-final-qa-gate-across-routing-cart-checkout-payment-flow-branding-image-reliability-and-blog-ux-before-marking-the-build-complete-fix-any-remaining-not-found-routes-or-broken-navigation-paths-uncovered-during-qa",
+      "title": "Run a final QA gate across routing, cart/checkout/payment flow, branding, image reliability, and blog UX before marking the build complete; fix any remaining Not Found routes or broken navigation paths uncovered during QA.",
+      "reqIds": [
+        "REQ-70"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-brand-new-petopia-logo-system-wordmark-subtle-pet-icon-and-replace-all-existing-logo-usages-so-the-only-displayed-brand-text-is-exactly-petopia-no-premium-anywhere-with-a-single-source-of-truth-used-across-navbar-footer-login-signup-cart-checkout-payment-confirmation-pages-and-any-fallback-alt-logo-rendering",
+      "title": "Generate a brand-new Petopia logo system (wordmark + subtle pet icon) and replace ALL existing logo usages so the only displayed brand text is exactly “Petopia” (no “Premium” anywhere), with a single source of truth used across: navbar, footer, login/signup, cart/checkout/payment, confirmation pages, and any fallback/alt logo rendering.",
+      "reqIds": [
+        "REQ-71"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-favicon-to-a-simplified-version-derived-directly-from-the-new-petopia-logo-icon-not-a-letter-and-ensure-the-html-entry-point-references-the-updated-favicon-asset",
+      "title": "Update favicon to a simplified version derived directly from the new Petopia logo icon (not a letter), and ensure the HTML entry point references the updated favicon asset.",
+      "reqIds": [
+        "REQ-72"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-standardize-the-entire-in-app-image-strategy-to-typescript-imported-assets-no-mixed-public-path-images-for-in-app-rendering-refactor-content-modules-e-g-products-adoption-blog-services-and-page-components-to-use-imported-image-references-so-images-resolve-reliably-on-all-routes-including-dynamic-routes",
+      "title": "Standardize the entire in-app image strategy to TypeScript-imported assets (no mixed public-path images for in-app rendering): refactor content modules (e.g., products, adoption, blog, services) and page/components to use imported image references so images resolve reliably on all routes, including dynamic routes.",
+      "reqIds": [
+        "REQ-73"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-image-loading-reliability-across-all-pages-by-adding-consistent-loading-behavior-and-fallbacks-for-lazy-loaded-images-e-g-graceful-placeholder-empty-state-rendering-when-an-image-fails-to-load-so-every-card-and-detail-page-shows-an-image-correctly-on-first-load",
+      "title": "Improve image loading reliability across all pages by adding consistent loading behavior and fallbacks for lazy-loaded images (e.g., graceful placeholder/empty-state rendering when an image fails to load) so every card and detail page shows an image correctly on first load.",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-run-a-release-blocking-qa-sweep-and-fix-any-remaining-issues-before-marking-the-build-complete-verify-premium-is-removed-everywhere-verify-zero-broken-images-across-the-sitemap-and-verify-adoption-product-service-blog-images-load-correctly-on-all-routes",
+      "title": "Run a release-blocking QA sweep and fix any remaining issues before marking the build complete: verify “Premium” is removed everywhere, verify zero broken images across the sitemap, and verify Adoption/Product/Service/Blog images load correctly on all routes.",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-21",
+      "summary": "Do not implement any backend features; keep the backend canister minimal/unused for this project (no persistence, no API endpoints required for the website to function).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Convert Petopia into a multi-page React app using React Router (Home, Services, Products, Adoption, Blog, About, Contact) with clean routes and separate page components",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Full UI replacement to a premium light-only startup aesthetic: white/beige/charcoal with muted green or navy accents, clean typography (Inter/Poppins), minimal elegant layout with strong spacing/depth; remove pastel/glassmorphism styling",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Add polished modern UI interactions: smooth page transitions, hover animations for cards/buttons, scroll-based fade-in animations, CTA micro-interactions, and a scroll-to-top button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Create fresh, professional, market-ready copy and new layouts for all pages (do not reuse old single-page content); ensure Home CTAs navigate to Services & Products and all navbar/footer links work with active state",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Use realistic, high-end stock-style placeholder pet photography across the site (user will replace later)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Create an enterprise-grade, fully connected multi-level sitemap (3-level where expected) across Services, Products, Adoption, Blog/Resources, About, plus system pages; ensure no orphan/dead-end pages and all pages are reachable via logical user journeys",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Add deeper navigation & subpages: Services (Category → Service Detail), Products (Category → Product Detail), Adoption (Listings → Pet Profile), Blog/Resources (Listing → Article Detail), About (Company Info → Team/Mission/Careers); include relevant images, descriptions, and CTAs on each page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add centralized Checkout/Payment flow (UI-only): dedicated Checkout page with order summary, user details form, payment method selection, and proceed/place order CTA; route all relevant CTAs (Buy Now/Adopt Now/Book Service) to Checkout; add success/failure (UI-only) outcome pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Implement simulated authentication UX (UI-only): Login, Sign Up, Profile, Orders/Requests history; gated/locked behavior or redirect-to-login for protected pages; show simulated logged-in state (avatar/account menu) after login/signup",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add professional confirmation/feedback pages per flow (unique messaging per action) for: Order Placed/Payment Confirmation, Adoption Request Submitted, Service Booking Confirmation, Contact Form Submitted; consistent design system across these pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Add navigation UX for deep pages: secondary navigation and/or breadcrumbs, plus logical back/forward pathways throughout multi-level hierarchies",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Add system states/pages and empty/error handling UI (e.g., No results found, empty listings, generic error page) to maintain production-grade completeness (frontend-only)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Enforce strict content/layout rules site-wide: professional stock-style imagery only; images and headings must be clearly separated (no text/headings inside images); premium spacing/hierarchy/alignment and consistent typography/tone",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Refine logo placement across the site (header/nav and key page heroes as applicable) and apply overall visual polish pass",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Replace generic/lifestyle placeholder imagery with content-accurate visuals across the site: product cards use real product-type images (food bags, toys, accessories, grooming kits, etc.), adoption listings use realistic pet profile photos, and services use relevant service imagery (not generic lifestyle).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Increase content depth/volume across the entire sitemap: multiple categories with many items per category and individual detail pages for Products, Services, Adoption (multiple listings + pet profiles), and Blog/Resources (multiple articles + post pages), avoiding shallow/repetitive templates.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Generate a new premium Petopia logo to define the brand identity going forward and apply it consistently across navbar, footer, and favicon (do not reuse existing logo assets).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Override (rebuild) existing simulated authentication and checkout/payment flows to match the specified enterprise-grade UX (login/signup → logged-in state, protected account pages UI-only; checkout → pay now → success + unique confirmation pages).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Add realistic simulated backend logic for authentication and payments: functional sign-in/sign-up, session/logout gating for protected pages, and simulated payment processing flow (checkout → payment → success/confirmation) while keeping the app demo-friendly",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Expand Account section to include Saved Items in addition to Profile, Orders, and Adoption Requests, with smooth navigation between Login/Signup/Account pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Enforce strict image-to-content accuracy across Products: replace any generic pet/lifestyle imagery with product-specific imagery (food packaging for food, collars for collars, toys for toys, etc.); ensure every product card and product detail page uses the correct product image(s).",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-52",
+      "summary": "Enforce strict image-to-content accuracy across Services: ensure each service category/detail uses service-relevant imagery (e.g., grooming visuals for grooming, training session visuals for training, clinical/vet visuals for vet care) and no random/irrelevant pet photos.",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-53",
+      "summary": "Increase product catalog depth significantly (realistic catalog scale): expand categories and product counts beyond a token set; ensure each product has distinct content (name, description, specs, reviews UI copy) and routes to its own product detail page without repetitive templating.",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-54",
+      "summary": "Fix Adoption card click/routing so the full hierarchy works (Adoption → Species → Breed → Pet Profile) with correct dynamic params; no “Not Found” routes; pet profile includes accurate breed image + key fields and “Adopt Now” CTA into cart/request flow.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-55",
+      "summary": "Add a dedicated Cart page supporting Products, Services, and Adoption requests with images, quantity (where applicable), remove item, and price summary; enforce flow Any page → Add to Cart → Cart → Checkout → Payment → Confirmation; prevent direct access to Payment without cart context.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-56",
+      "summary": "Fix PETOPIA logo text everywhere: remove the word “Premium” and ensure the wordmark reads exactly “Petopia” across navbar, footer, auth pages, checkout/payment, and confirmation pages (no subtitle/variants).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-57",
+      "summary": "Resolve image loading/quality issues site-wide: fix broken paths, ensure reliable first-load rendering, proper lazy-loading, and optimized-but-sharp assets; regenerate/replace any mismatched, generic placeholder, or incorrect product/service/breed imagery to achieve 100% visual accuracy.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-58",
+      "summary": "Upgrade Blog UX & content depth: blog listing with category filters + featured section + hover animations; article pages with hero image, reading progress indicator, related articles, and share buttons (UI-only); replace generic/lorem-style content with informative premium pet-industry copy.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-59",
+      "summary": "Run final QA gate before marking complete: verify zero Not Found routes, Cart→Payment works end-to-end, branding text is correct everywhere, all images load reliably, and deep subpages/blog feel premium and non-templated.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-67",
+      "summary": "Upgrade Blog UX and content depth: implement an improved /blog listing experience with category filters and a featured article section, add premium hover animations on blog cards, and upgrade article pages with a reading progress indicator and share buttons (UI-only) while keeping content informative and pet-industry relevant (not generic/lorem).",
+      "reqIds": [
+        "REQ-68"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Petopia",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

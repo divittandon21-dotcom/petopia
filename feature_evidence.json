@@ -1,0 +1,143 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-generate-a-brand-new-petopia-logo-system-wordmark-subtle-pet-icon-and-replace-all-existing-logo-usages-so-the-only-displayed-brand-text-is-exactly-petopia-no-premium-anywhere-with-a-single-source-of-truth-used-across-navbar-footer-login-signup-cart-checkout-payment-confirmation-pages-and-any-fallback-alt-logo-rendering",
+      "featureTitle": "Generate a brand-new Petopia logo system (wordmark + subtle pet icon) and replace ALL existing logo usages so the only displayed brand text is exactly “Petopia” (no “Premium” anywhere), with a single source of truth used across: navbar, footer, login/signup, cart/checkout/payment, confirmation pages, and any fallback/alt logo rendering.",
+      "files": [
+        "frontend/src/assets/brand.ts",
+        "frontend/src/components/navigation/BrandLogo.tsx",
+        "frontend/src/pages/account/LoginPage.tsx",
+        "frontend/src/pages/account/SignupPage.tsx",
+        "frontend/src/pages/cart/CartPage.tsx",
+        "frontend/src/pages/checkout/CheckoutPage.tsx",
+        "frontend/src/pages/checkout/PaymentPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-71"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-favicon-to-a-simplified-version-derived-directly-from-the-new-petopia-logo-icon-not-a-letter-and-ensure-the-html-entry-point-references-the-updated-favicon-asset",
+      "featureTitle": "Update favicon to a simplified version derived directly from the new Petopia logo icon (not a letter), and ensure the HTML entry point references the updated favicon asset.",
+      "files": [
+        "frontend/index.html"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-72"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-standardize-the-entire-in-app-image-strategy-to-typescript-imported-assets-no-mixed-public-path-images-for-in-app-rendering-refactor-content-modules-e-g-products-adoption-blog-services-and-page-components-to-use-imported-image-references-so-images-resolve-reliably-on-all-routes-including-dynamic-routes",
+      "featureTitle": "Standardize the entire in-app image strategy to TypeScript-imported assets (no mixed public-path images for in-app rendering): refactor content modules (e.g., products, adoption, blog, services) and page/components to use imported image references so images resolve reliably on all routes, including dynamic routes.",
+      "files": [
+        "frontend/src/assets/generated/index.ts",
+        "frontend/src/components/design/PageHero.tsx",
+        "frontend/src/content/adoption.ts",
+        "frontend/src/content/blog.ts",
+        "frontend/src/content/products.ts",
+        "frontend/src/content/services.ts",
+        "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+        "frontend/src/pages/adoption/PetProfilePage.tsx",
+        "frontend/src/pages/blog/BlogArticlePage.tsx",
+        "frontend/src/pages/blog/BlogTopicPage.tsx",
+        "frontend/src/pages/cart/CartPage.tsx",
+        "frontend/src/pages/checkout/CheckoutPage.tsx",
+        "frontend/src/pages/checkout/PaymentPage.tsx",
+        "frontend/src/pages/products/ProductCategoryPage.tsx",
+        "frontend/src/pages/products/ProductDetailPage.tsx",
+        "frontend/src/pages/services/ServiceDetailPage.tsx",
+        "frontend/src/pages/services/ServicesCategoryPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-73"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-image-loading-reliability-across-all-pages-by-adding-consistent-loading-behavior-and-fallbacks-for-lazy-loaded-images-e-g-graceful-placeholder-empty-state-rendering-when-an-image-fails-to-load-so-every-card-and-detail-page-shows-an-image-correctly-on-first-load",
+      "featureTitle": "Improve image loading reliability across all pages by adding consistent loading behavior and fallbacks for lazy-loaded images (e.g., graceful placeholder/empty-state rendering when an image fails to load) so every card and detail page shows an image correctly on first load.",
+      "files": [
+        "frontend/src/components/design/PageHero.tsx",
+        "frontend/src/components/media/AppImage.tsx",
+        "frontend/src/pages/adoption/AdoptionListingsPage.tsx",
+        "frontend/src/pages/adoption/PetProfilePage.tsx",
+        "frontend/src/pages/blog/BlogArticlePage.tsx",
+        "frontend/src/pages/blog/BlogTopicPage.tsx",
+        "frontend/src/pages/cart/CartPage.tsx",
+        "frontend/src/pages/checkout/CheckoutPage.tsx",
+        "frontend/src/pages/checkout/PaymentPage.tsx",
+        "frontend/src/pages/products/ProductCategoryPage.tsx",
+        "frontend/src/pages/products/ProductDetailPage.tsx",
+        "frontend/src/pages/services/ServiceDetailPage.tsx",
+        "frontend/src/pages/services/ServicesCategoryPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-74"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-run-a-release-blocking-qa-sweep-and-fix-any-remaining-issues-before-marking-the-build-complete-verify-premium-is-removed-everywhere-verify-zero-broken-images-across-the-sitemap-and-verify-adoption-product-service-blog-images-load-correctly-on-all-routes",
+      "featureTitle": "Run a release-blocking QA sweep and fix any remaining issues before marking the build complete: verify “Premium” is removed everywhere, verify zero broken images across the sitemap, and verify Adoption/Product/Service/Blog images load correctly on all routes.",
+      "files": [
+        "frontend/src/components/navigation/BrandLogo.tsx",
+        "frontend/src/content/adoption.ts",
+        "frontend/src/content/blog.ts",
+        "frontend/src/content/products.ts",
+        "frontend/src/content/services.ts",
+        "frontend/src/pages/account/LoginPage.tsx",
+        "frontend/src/pages/account/SignupPage.tsx",
+        "frontend/src/pages/cart/CartPage.tsx",
+        "frontend/src/pages/checkout/CheckoutPage.tsx",
+        "frontend/src/pages/checkout/PaymentPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-75"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

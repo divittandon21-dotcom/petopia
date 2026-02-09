@@ -1,0 +1,134 @@
+{
+  "kind": "build_request",
+  "title": "Release-blocker fixes: regenerate Petopia logo (remove “Premium”) and standardize reliable image loading via TypeScript imports",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-71",
+      "text": "Generate a brand-new Petopia logo system (wordmark + subtle pet icon) and replace ALL existing logo usages so the only displayed brand text is exactly “Petopia” (no “Premium” anywhere), with a single source of truth used across: navbar, footer, login/signup, cart/checkout/payment, confirmation pages, and any fallback/alt logo rendering.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-6",
+          "msg-8",
+          "msg-10"
+        ],
+        "quotes": [
+          "The word “Premium” must be COMPLETELY removed from the logo.",
+          "GENERATE a brand-new logo for the company.",
+          "Use a wordmark + subtle icon combination.",
+          "There should be a single source of truth for the logo across the entire application."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Searching the codebase for the string \"Premium\" returns zero instances in logo/brand contexts (including SVG text, image names, alt/fallback content).",
+        "All pages that render a logo (global header/footer, /account/login, /account/signup, /cart, /checkout, /payment, and all confirmation pages) display the exact wordmark text “Petopia”.",
+        "There is exactly one reusable frontend component/module responsible for rendering the logo (icon + wordmark) and all other logo renderings delegate to it (no duplicate inline SVGs or hardcoded logo paths)."
+      ]
+    },
+    {
+      "id": "REQ-72",
+      "text": "Update favicon to a simplified version derived directly from the new Petopia logo icon (not a letter), and ensure the HTML entry point references the updated favicon asset.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-10",
+          "msg-8"
+        ],
+        "quotes": [
+          "Use a simplified version of the logo icon (not a generic letter).",
+          "Favicon (simplified version)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The favicon is visually recognizable at small sizes and matches the logo icon style.",
+        "frontend/index.html references the new favicon file and the favicon loads correctly in the browser tab on first load."
+      ]
+    },
+    {
+      "id": "REQ-73",
+      "text": "Standardize the entire in-app image strategy to TypeScript-imported assets (no mixed public-path images for in-app rendering): refactor content modules (e.g., products, adoption, blog, services) and page/components to use imported image references so images resolve reliably on all routes, including dynamic routes.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6",
+          "msg-4"
+        ],
+        "quotes": [
+          "Standardize the entire project on ONE approach: Use imported image assets via TypeScript imports.",
+          "Images are currently not loading reliably."
+        ]
+      },
+      "acceptanceCriteria": [
+        "In-app images (cards, heroes, galleries, thumbnails, order/cart summary images) are rendered from TypeScript imports rather than string paths like \"/assets/...\".",
+        "Navigation across dynamic routes (e.g., product detail, adoption species/breed/pet profile, blog topic/article) shows correct images on first load and on refresh (no broken images).",
+        "No components/pages reference broken absolute paths for in-app images (e.g., hardcoded \"/assets/generated/...\" in JSX for non-favicon use cases)."
+      ]
+    },
+    {
+      "id": "REQ-74",
+      "text": "Improve image loading reliability across all pages by adding consistent loading behavior and fallbacks for lazy-loaded images (e.g., graceful placeholder/empty-state rendering when an image fails to load) so every card and detail page shows an image correctly on first load.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Adding proper fallbacks for lazy-loaded images\n\nEvery card and detail page MUST show its image correctly on first load."
+        ]
+      },
+      "acceptanceCriteria": [
+        "If an image fails to load, the UI displays a consistent fallback presentation instead of a broken-image icon or layout collapse.",
+        "Key listing/detail surfaces (Products, Services, Adoption, Blog) do not show missing/broken images during normal navigation and refresh scenarios.",
+        "Lazy-loaded images use consistent settings and do not cause blank gaps during initial render (especially in grids and galleries)."
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "text": "Run a release-blocking QA sweep and fix any remaining issues before marking the build complete: verify “Premium” is removed everywhere, verify zero broken images across the sitemap, and verify Adoption/Product/Service/Blog images load correctly on all routes.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Do not proceed to hosting or mark the build complete until:\n- “Premium” is removed everywhere\n- No image is broken across any page\n- Adoption, Product, Service, and Blog images load correctly on all routes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Manual QA pass confirms the three blocker conditions (no “Premium”, no broken images, correct image loading across Adoption/Product/Service/Blog) are satisfied across routed navigation and direct URL entry (refresh).",
+        "Any discovered broken routes or broken assets are fixed as part of this task, with no regressions in cart/checkout/payment navigation."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend-only scope for this blocker pass; do not add or change backend features/APIs.",
+    "Do not edit files under frontend/src/components/ui or the immutable hook/entry files listed in SYSTEM_CONTEXT.",
+    "Standardize in-app images on TypeScript imports (no mixed public-path strategy for in-app rendering).",
+    "Favicon must remain referenced from frontend/index.html (static file reference is required by HTML)."
+  ],
+  "nonGoals": [
+    "Regenerating or replacing all images site-wide; only replace images that are broken, mismatched with content, or overly generic where specificity is required.",
+    "Adding new pages or changing sitemap/IA beyond what is necessary to fix logo and image-loading blockers.",
+    "Rebuilding checkout/payment UX or auth UX beyond what is necessary to fix logo/image issues."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Petopia primary logo icon (petopia-logo-icon.dim_512x512.png)",
+      "Petopia wordmark + icon horizontal lockup on light background (petopia-logo-lockup.dim_1400x400.png)",
+      "Petopia favicon derived from the logo icon (petopia-favicon.dim_64x64.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}
